@@ -1,0 +1,7 @@
+const assetsActionTypes = {
+  FETCH_ASSETS_START: "FETCH_ASSETS_START",
+  FETCH_ASSETS_SUCCESS: "FETCH_ASSETS_SUCCESS",
+  FETCH_ASSETS_FAILURE: "FETCH_ASSETS_FAILURE",
+};
+
+export default assetsActionTypes;
