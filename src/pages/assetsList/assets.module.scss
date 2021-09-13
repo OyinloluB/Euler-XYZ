@@ -52,18 +52,14 @@
   }
 
   button {
-    background-color: black;
+    background-color: rgb(243, 228, 209);
     border-radius: 8px;
     padding: 10px 0;
-    color: white;
+    color: teal;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
     width: 100%;
     border: none;
   }
-}
-
-.pagination {
-  margin-top: 10vh;
 }

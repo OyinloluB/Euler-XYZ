@@ -15,6 +15,20 @@ export const fetchAssetsFailure = (error) => ({
   payload: error,
 });
 
+export const fetchAssetsIdStart = () => ({
+  type: assetsActionTypes.FETCH_ASSETSID_START,
+});
+
+export const fetchAssetsIdSuccess = (assets) => ({
+  type: assetsActionTypes.FETCH_ASSETSID_SUCCESS,
+  payload: assets,
+});
+
+export const fetchAssetsIdFailure = (error) => ({
+  type: assetsActionTypes.FETCH_ASSETSID_FAILURE,
+  payload: error,
+});
+
 export const fetchAssets = () => {
   return (dispatch) => {
     return new Promise(async (resolve, reject) => {
@@ -26,6 +40,23 @@ export const fetchAssets = () => {
         dispatch(fetchAssetsSuccess(data));
       } catch (error) {
         dispatch(fetchAssetsFailure(error));
+        reject(error);
+      }
+    });
+  };
+};
+
+export const fetchAssetsId = (contractAddress, tokenId) => {
+  return (dispatch) => {
+    return new Promise(async (resolve, reject) => {
+      dispatch(fetchAssetsIdStart());
+      try {
+        const response = await axios.get(`/v1/asset/${contractAddress}/${tokenId}/`);
+        const { data } = response;
+        console.log('single asset data', data.assets);
+        dispatch(fetchAssetsIdSuccess(data));
+      } catch (error) {
+        dispatch(fetchAssetsIdFailure(error));
         reject(error);
       }
     });

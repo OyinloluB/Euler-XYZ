@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./assets.module.scss";
 import { CircularProgress } from "@material-ui/core";
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from "@material-ui/lab/Skeleton";
 import { fetchAssets } from "../../redux/assets/assets.actions";
 
-const Assets = () => {
+const Assets = ({ setAssetParams }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { assets, loading } = useSelector((state) => state.assets);
@@ -24,7 +24,7 @@ const Assets = () => {
         </div>
       ) : (
         <div className={styles.assets_wrapper}>
-          {assets.map((asset) => (
+          {assets?.map((asset) => (
             <div className={styles.asset} key={asset.id}>
               <div className={styles.asset_image}>
                 {asset.image_url ? (
@@ -39,7 +39,15 @@ const Assets = () => {
                 </p>
               </div>
               <div className={styles.asset_cta}>
-                <button onClick={() => history.push(`/assets/${asset.id}`)}>
+                <button
+                  onClick={() => {
+                    setAssetParams({
+                      contractAddress: asset.asset_contract.address,
+                      tokenId: asset.token_id,
+                    });
+                    history.push(`/assets/${asset.asset_contract.address}`);
+                  }}
+                >
                   Details
                 </button>
               </div>
