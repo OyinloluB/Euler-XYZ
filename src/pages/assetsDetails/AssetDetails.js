@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { fetchAssetsId } from "../../redux/assets/assets.actions";
 
 import { useEthers, useEtherBalance } from "@usedapp/core";
@@ -8,21 +9,23 @@ import { formatEther } from "@ethersproject/units";
 
 import styles from "./assetdetails.module.scss";
 
-const AssetDetails = ({ assetParams }) => {
+const AssetDetails = () => {
   const dispatch = useDispatch();
+  const { contractAddress, tokenId } = useParams();
   const { asset } = useSelector((state) => state.assets);
 
-  const { activateBrowserWallet, account } = useEthers();
+  console.log(contractAddress);
+  // Set up hooks that'll allow for easy connection to our Metamask wallet
+  const { activateBrowserWallet, account, deactivate } = useEthers();
   const etherBalance = useEtherBalance(account);
 
-  console.log("etherBalance", etherBalance);
-
   useEffect(() => {
-    dispatch(fetchAssetsId(assetParams.contractAddress, assetParams.tokenId));
+    dispatch(fetchAssetsId(contractAddress, tokenId));
   }, [dispatch]);
 
+  // Handle connections to Metamask here
   const handleConnectWallet = () => {
-    activateBrowserWallet();
+    account ? deactivate() : activateBrowserWallet();
   };
 
   return (
@@ -33,21 +36,27 @@ const AssetDetails = ({ assetParams }) => {
       <div key={asset.id}>
         <div className={styles.assetdetails_details}>
           <div className={styles.assetdetails_details_image}>
-            <img src={asset.image_url} alt={asset.name} />
+            {asset.image_url ? (
+              <img src={asset.image_url} alt={asset.name} />
+            ) : (
+              <Skeleton variant="rect" height="100%" />
+            )}
           </div>
           <div>
             <div>
               <p>
                 <b>Name:</b> {asset.name}
               </p>
-              <p>
-                <b>Wallet Balance: </b>
-                {etherBalance &&
-                  parseFloat(formatEther(etherBalance)).toFixed(3)}{" "}
-                ETH
-              </p>
+              {account && (
+                <p>
+                  <b>Wallet Balance: </b>
+                  {etherBalance &&
+                    parseFloat(formatEther(etherBalance)).toFixed(3)}{" "}
+                  ETH
+                </p>
+              )}
               <button onClick={handleConnectWallet}>
-                {account ? "Make a Purchase" : "Connect to Metamask"}
+                {account ? "Disconnect Wallet" : "Connect to Metamask"}
               </button>
             </div>
             <div className={styles.assetdetails_paymentTokensWrapper}>
@@ -60,10 +69,10 @@ const AssetDetails = ({ assetParams }) => {
                     <b>Symbol:</b> {payment_token.symbol}
                   </p>
                   <p>
-                    <b>Eth Price:</b> {payment_token.eth_price}
+                    <b>Eth Price:</b> {payment_token.eth_price.toFixed(3)}
                   </p>
                   <p>
-                    <b>Dollar Price:</b> {payment_token.usd_price}
+                    <b>Dollar Price:</b> $ {Math.round(payment_token.usd_price)}
                   </p>
                 </div>
               ))}

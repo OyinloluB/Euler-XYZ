@@ -1,20 +1,35 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchAssets } from "../../redux/assets/assets.actions";
 
 import styles from "./assets.module.scss";
 import { CircularProgress } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { fetchAssets } from "../../redux/assets/assets.actions";
 
-const Assets = ({ setAssetParams }) => {
+const Assets = ({ setAssetParams, sort }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { assets, loading } = useSelector((state) => state.assets);
 
   useEffect(() => {
+    // Fetch all assets
     dispatch(fetchAssets());
   }, [dispatch]);
+
+  let sortedAssets = assets.sort((a, b) => {
+    if (sort === "Newest") {
+      return (
+        new Date(b.asset_contract.created_date).getTime() -
+        new Date(a.asset_contract.created_date).getTime()
+      );
+    } else if (sort === "Oldest") {
+      return (
+        new Date(a.asset_contract.created_date).getTime() -
+        new Date(b.asset_contract.created_date).getTime()
+      );
+    }
+  });
 
   return (
     <div className={styles.assets}>
@@ -24,7 +39,7 @@ const Assets = ({ setAssetParams }) => {
         </div>
       ) : (
         <div className={styles.assets_wrapper}>
-          {assets?.map((asset) => (
+          {sortedAssets?.map((asset) => (
             <div className={styles.asset} key={asset.id}>
               <div className={styles.asset_image}>
                 {asset.image_url ? (
@@ -45,7 +60,7 @@ const Assets = ({ setAssetParams }) => {
                       contractAddress: asset.asset_contract.address,
                       tokenId: asset.token_id,
                     });
-                    history.push(`/assets/${asset.asset_contract.address}`);
+                    history.push(`/assets/${asset.asset_contract.address}/${asset.token_id}`);
                   }}
                 >
                   Details

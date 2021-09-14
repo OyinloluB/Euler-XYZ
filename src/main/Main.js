@@ -9,10 +9,15 @@ import Assets from "../pages/assetsList/Assets";
 const Main = () => {
   const location = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [sort, setSort] = useState("Newest");
   const [assetParams, setAssetParams] = useState({
     contractAddress: "",
     tokenId: "",
   });
+
+  const handleSort = (e) => {
+    setSort(e.target.value);
+  };
 
   return (
     <div>
@@ -21,12 +26,12 @@ const Main = () => {
         mobileNavOpen={mobileNavOpen}
       />
       {location.pathname === "/" && (
-        <SideNavbar mobileNavOpen={mobileNavOpen} />
+        <SideNavbar mobileNavOpen={mobileNavOpen} handleSort={handleSort} />
       )}
       <Route exact path="/">
-        <Assets setAssetParams={setAssetParams} />
+        <Assets setAssetParams={setAssetParams} sort={sort} />
       </Route>
-      <Route exact path="/assets/:id/">
+      <Route exact path="/assets/:contractAddress/:tokenId">
         <AssetDetails assetParams={assetParams} />
       </Route>
     </div>
