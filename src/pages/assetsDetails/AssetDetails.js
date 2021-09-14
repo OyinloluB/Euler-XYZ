@@ -16,7 +16,6 @@ const AssetDetails = () => {
   const { contractAddress, tokenId } = useParams();
   const { loading, asset } = useSelector((state) => state.assets);
 
-  console.log(contractAddress);
   // Set up hooks that'll allow for easy connection to our Metamask wallet
   const { activateBrowserWallet, account, deactivate } = useEthers();
   const etherBalance = useEtherBalance(account);
