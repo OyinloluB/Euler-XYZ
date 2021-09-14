@@ -9,7 +9,7 @@ import Assets from "../pages/assetsList/Assets";
 const Main = () => {
   const location = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [sort, setSort] = useState("Newest");
+  const [sort, setSort] = useState("");
   const [assetParams, setAssetParams] = useState({
     contractAddress: "",
     tokenId: "",
