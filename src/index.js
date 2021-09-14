@@ -8,13 +8,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import { DAppProvider } from "@usedapp/core";
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter>
         <React.StrictMode>
           <Switch>
-            <App />
+            <DAppProvider config={{}}>
+              <App />
+            </DAppProvider>
           </Switch>
         </React.StrictMode>
       </BrowserRouter>

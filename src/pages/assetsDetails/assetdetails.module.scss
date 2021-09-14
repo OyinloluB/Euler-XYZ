@@ -37,7 +37,7 @@
       padding: 15px;
 
       p {
-        margin: 0;
+        margin: 0 0 5px;
         color: white;
       }
     }
@@ -46,7 +46,7 @@
   &_details {
     display: grid;
     grid-template-columns: 40% auto;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 10%;
 
     @media screen and (max-width: 768px) {

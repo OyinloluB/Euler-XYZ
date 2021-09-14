@@ -3,15 +3,27 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAssetsId } from "../../redux/assets/assets.actions";
 
+import { useEthers, useEtherBalance } from "@usedapp/core";
+import { formatEther } from "@ethersproject/units";
+
 import styles from "./assetdetails.module.scss";
 
 const AssetDetails = ({ assetParams }) => {
   const dispatch = useDispatch();
   const { asset } = useSelector((state) => state.assets);
 
+  const { activateBrowserWallet, account } = useEthers();
+  const etherBalance = useEtherBalance(account);
+
+  console.log("etherBalance", etherBalance);
+
   useEffect(() => {
     dispatch(fetchAssetsId(assetParams.contractAddress, assetParams.tokenId));
   }, [dispatch]);
+
+  const handleConnectWallet = () => {
+    activateBrowserWallet();
+  };
 
   return (
     <div className={styles.assetdetails}>
@@ -26,9 +38,17 @@ const AssetDetails = ({ assetParams }) => {
           <div>
             <div>
               <p>
-                <b>Name: {asset.name}</b>
+                <b>Name:</b> {asset.name}
               </p>
-              <button>Connect to Metamask</button>
+              <p>
+                <b>Wallet Balance: </b>
+                {etherBalance &&
+                  parseFloat(formatEther(etherBalance)).toFixed(3)}{" "}
+                ETH
+              </p>
+              <button onClick={handleConnectWallet}>
+                {account ? "Make a Purchase" : "Connect to Metamask"}
+              </button>
             </div>
             <div className={styles.assetdetails_paymentTokensWrapper}>
               {asset.collection?.payment_tokens.map((payment_token) => (

@@ -10,8 +10,8 @@
 
   &_wrapper {
     display: grid;
-    grid-template-columns: auto auto auto;
-    grid-column-gap: 3%;
+    grid-template-columns: repeat(3, 30%);
+    grid-column-gap: 3.33%;
     padding: 50px;
     grid-row-gap: 15px;
 
@@ -37,7 +37,7 @@
 
   &_image {
     height: 200px;
-    width: 100%;
+    max-width: 100%;
 
     img {
       width: 100%;
