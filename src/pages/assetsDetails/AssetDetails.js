@@ -10,7 +10,6 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { fetchAssetsId } from "../../redux/assets/assets.actions";
 import styles from "./assetdetails.module.scss";
 
-
 const AssetDetails = () => {
   const dispatch = useDispatch();
   const { contractAddress, tokenId } = useParams();
@@ -65,8 +64,17 @@ const AssetDetails = () => {
                   <button onClick={handleConnectWallet}>
                     {account ? "Disconnect Wallet" : "Connect to Metamask"}
                   </button>
+                  {!account && (
+                    <p className={styles.span}>
+                      You need to have Metamask installed to connect. Click{" "}
+                      <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">
+                        here
+                      </a>{" "}
+                      to add the extension
+                    </p>
+                  )}
                 </div>
-                <div className={styles.assetdetails_paymentTokensWrapper}>
+                <div className={styles.paymentTokensWrapper}>
                   {asset.collection?.payment_tokens.map((payment_token) => (
                     <div
                       key={payment_token.id}
